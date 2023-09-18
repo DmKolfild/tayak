@@ -13,6 +13,11 @@ public class Calculator {
         return operators.indexOf(c) != -1;
     }
 
+    static private boolean IsOperatorWithoutStaples(char c) {
+        String operators = "+-/*^";
+        return operators.indexOf(c) != -1;
+    }
+
     //Метод возвращает true, если проверяемый символ - разделитель ("пробел")
     static private boolean IsDelimeter(char c) {
         return c == ' ' || c == '\t';
@@ -29,6 +34,9 @@ public class Calculator {
     }
 
     static private String GetExpression(String input) {
+        input = input.replaceAll("\\s{2,}", " "); // замены всех двойных пробелов одинарным
+        input = input.trim(); // убраны пробелы в начале и конце строки
+
         Pattern pattern = Pattern.compile("pow\\((?<first>.*?),(?<second>.*?)\\)"); // регулярка для поиска pow(a,b)
         Matcher matcher = pattern.matcher(input);
         // замена всех pow(a,b) на ((a)^(b))
@@ -50,20 +58,13 @@ public class Calculator {
         if (input.contains(".."))
             return "Некорректный формат чисел!";
 
-//        pattern = Pattern.compile("\\s*[+\\-*/^]\\s*[+\\-*/^]\\s*");  // операции следуют друг за другом
-//        matcher = pattern.matcher(input);
-//        if (matcher.find())
-//            return "Операции следуют друг за другом!";
-
-        pattern = Pattern.compile("\\d+(\\s+\\d+)*"); // пробелы между чисел
+        pattern = Pattern.compile("\\s*[+\\-*/^]\\s*[+\\-*/^]\\s*");  // операции следуют друг за другом
         matcher = pattern.matcher(input);
-        if (!matcher.find())
-            return "Между числами не должны быть исключительно пробелы!";
+        if (matcher.find())
+            return "Операции следуют друг за другом!";
 
-        pattern = Pattern.compile("\\d+[+\\-*/^](\\s*\\d+)+"); // операция без ваторого аргумента
-        matcher = pattern.matcher(input);
-        if (!matcher.find())
-            return "После операций должно быть число!";
+        if (IsOperatorWithoutStaples(input.charAt(input.length()-1)))
+            return "Строка не должна заканчиваться на знак операции!";
 
         StringBuilder output = new StringBuilder(); //Строка для хранения выражения
         Stack<Character> operStack = new Stack<>(); //Стек для хранения операторов
