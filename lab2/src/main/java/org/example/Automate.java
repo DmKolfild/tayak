@@ -120,7 +120,7 @@ public class Automate {
                 }
 
                 if (group.size() > 1) {
-                    String newStateName = "";
+                    StringBuilder newStateName = new StringBuilder();
                     List<String> backupStates = new ArrayList<>();
 
                     TransitionFunction[] sortedNextStatsArray = group.stream()
@@ -128,16 +128,16 @@ public class Automate {
                             .toArray(TransitionFunction[]::new);
 
                     for (TransitionFunction dest : sortedNextStatsArray) {
-                        newStateName = dest.getNextState();
+                        newStateName.append(dest.getNextState());
                         backupStates.add(dest.getNextState());
                     }
 
                     newStatesByPair.add(backupStates);
-                    newStatesNames.add(newStateName);
+                    newStatesNames.add(newStateName.toString());
 
                     TransitionFunctions.removeIf(tf -> tf.getCurrentState().equals(group.get(0).getCurrentState()) && tf.getSymbol() == group.get(0).getSymbol());
-                    TransitionFunctions.add(new TransitionFunction(group.get(0).getCurrentState(), group.get(0).getSymbol(), newStateName));
-                    States.add(newStateName);
+                    TransitionFunctions.add(new TransitionFunction(group.get(0).getCurrentState(), group.get(0).getSymbol(), newStateName.toString()));
+                    States.add(newStateName.toString());
                 }
             }
 
@@ -160,7 +160,34 @@ public class Automate {
 
         }
         CheckFinallyStates();
+
+        RemoveUnnesaseryFunctions();
+
         System.out.println("Automate is Determizated!\n");
+    }
+
+    private void RemoveUnnesaseryFunctions() {
+        List<TransitionFunction> group = new ArrayList<>();
+        for (int i = 0; i < TransitionFunctions.size(); i++) {
+            int count = 0;
+            TransitionFunction func = TransitionFunctions.get(i);
+            for (int q = 0; q < TransitionFunctions.size(); q++) {
+                if (func.getCurrentState().equals(TransitionFunctions.get(q).getNextState())) {
+                    if (count == 1)
+                        continue;
+                    if (q != i) {
+                        group.add(func);
+                        count++;
+                    }
+                }
+
+            }
+        }
+        for (TransitionFunction func : TransitionFunctions) {
+            if (func.getCurrentState().equals(StartState))
+                group.add(func);
+        }
+        TransitionFunctions = group;
     }
 
 

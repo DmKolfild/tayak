@@ -24,11 +24,19 @@ public class Program {
             add('*');
             add('0');
             add('1');
+            add(';');
+            add('*');
+            add(',');
+            add(' ');
+            add('=');
+            add('3');
+            add('5');
+            add('7');
         }
     };
 
     public static void main(String[] args) throws FileNotFoundException {
-        FileManager fileManager = new FileManager(Paths.get(directory, "var2.txt").toString());
+        FileManager fileManager = new FileManager(Paths.get(directory, "var3_nd.txt").toString());
 
         fileManager.readFileByLines();
 
@@ -49,7 +57,7 @@ public class Program {
         automate.determization();
         automate.PrintTransitionFunctions();
 
-        if (automate.isExecutableForInputLine("acacacb")) {
+        if (automate.isExecutableForInputLine("aaaaaaaaab")) {
             System.out.println("Is executable");
         } else {
             System.out.println("Is NOT executable");

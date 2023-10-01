@@ -33,6 +33,7 @@ public class CodeAnalyzer implements IAnalyzer {
             System.out.println("Incorrect symbol - " + analyzingLine.charAt(i));
             return false;
         }
+
         i++;
 
         if (analyzingLine.length() == i) {
@@ -41,7 +42,6 @@ public class CodeAnalyzer implements IAnalyzer {
         }
 
         if (!alphabet.contains(analyzingLine.charAt(i))) {
-            System.out.println("2");
             System.out.println("Incorrect symbol - " + analyzingLine.charAt(i));
             return false;
         }
@@ -53,7 +53,6 @@ public class CodeAnalyzer implements IAnalyzer {
         }
 
         if (analyzingLine.charAt(i) != '=') {
-            System.out.println("3");
             System.out.println("Incorrect symbol - " + analyzingLine.charAt(i));
             return false;
         }
@@ -67,7 +66,6 @@ public class CodeAnalyzer implements IAnalyzer {
         i = Integer.parseInt(readState(analyzingLine, i)[1]);
 
         if (i < analyzingLine.length()) {
-            System.out.println("4");
             System.out.println("Incorrect symbol - " + analyzingLine.charAt(i));
             return false;
         }
