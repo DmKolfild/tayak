@@ -37,13 +37,14 @@ public class Calculator {
         input = input.replaceAll("\\s{2,}", " "); // замены всех двойных пробелов одинарным
         input = input.trim(); // убраны пробелы в начале и конце строки
 
-        Pattern pattern = Pattern.compile("pow\\((?<first>.*?),(?<second>.*?)\\)"); // регулярка для поиска pow(a,b)
+        Pattern pattern = Pattern.compile("pow\\((?<first>\\s*.*?\\s*),(?<second>\\s*.*?)\\)"); // регулярка для поиска pow(a,b)
         Matcher matcher = pattern.matcher(input);
         // замена всех pow(a,b) на ((a)^(b))
         while (matcher.find()) {
-            input = input.replaceAll("pow\\((?<first>.*?),(?<second>.*?)\\)", "((${first})^(${second}))");
+            input = input.replaceAll("pow\\((?<first>\\s*.*?\\s*),(?<second>\\s*.*?)\\)", "((${first})^(${second}))");
             matcher = pattern.matcher(input);
         }
+        input = input.replaceAll("\\s+-", "-");
 
         pattern = Pattern.compile("(?<=\\d)\\("); // регулярка для поиска выражений вида 5(2+2), т.е где упущен знак умножить
         matcher = pattern.matcher(input);
@@ -78,7 +79,7 @@ public class Calculator {
                 //Читаем до разделителя или оператора, что бы получить число
                 while ((!IsDelimeter(input.charAt(i))) && !IsOperator(input.charAt(i))) {
                     if (!Character.isDigit(input.charAt(i)) && input.charAt(i) != '.')
-                        return "Ошибка! " + (i + 1) + "-ый символ не является символом операции или цифрой";
+                        return "В " + (i + 1) + "-м символе ошибка, не является символом операции или цифрой";
                     tempOut.append(input.charAt(i)); //Добавляем каждую цифру числа к нашей строке
                     i++; //Переходим к следующему символу
                     if (i == input.length()) break; //Если символ - последний, то выходим из цикла
@@ -151,7 +152,7 @@ public class Calculator {
     //Метод, вычисляющий значение выражения, уже преобразованного в постфиксную запись
     private static double Counting(String input) {
         double result = Double.NaN; //Результат
-        Stack<Double> temp = new Stack<Double>(); //Временный стек для решения
+        Stack<Double> temp = new Stack<>(); //Временный стек для решения
 
         for (int i = 0; i < input.length(); i++) { //Для каждого символа в строке
             //Если символ - цифра, то читаем все число и записываем на вершину стека
@@ -164,7 +165,13 @@ public class Calculator {
                     if (i == input.length()) break;
                 }
                 a = new StringBuilder(a.toString().replaceAll("(?<!\\d)\\.", "0."));
-                temp.push(Double.parseDouble(String.valueOf(a))); //Записываем в стек
+
+                try {
+                    temp.push(Double.parseDouble(String.valueOf(a))); //Записываем в стек
+                }
+                catch (java.lang.NumberFormatException ignored) {
+                    System.out.println("В числе не должно быть двух точек!");
+                }
 
                 i--;
             }
