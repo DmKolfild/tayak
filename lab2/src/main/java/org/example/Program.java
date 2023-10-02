@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Program {
     private static final String directory = Paths.get("").toAbsolutePath().resolve("D:\\ТАЯК\\tayak\\lab2\\src\\main\\java\\org\\example\\").toString();
@@ -32,6 +33,13 @@ public class Program {
             add('3');
             add('5');
             add('7');
+            add('m');
+            add('h');
+            add('o');
+            add('k');
+            add('z');
+            add('y');
+            add('x');
         }
     };
 
@@ -57,10 +65,15 @@ public class Program {
         automate.determization();
         automate.PrintTransitionFunctions();
 
-        if (automate.isExecutableForInputLine("aaaaaaaaab")) {
-            System.out.println("Is executable");
-        } else {
-            System.out.println("Is NOT executable");
+        Scanner sc = new Scanner(System.in);
+        while (true)
+        {
+            String inputLine = sc.nextLine();
+            if (automate.isExecutableForInputLine(inputLine)) {
+                System.out.println("Is executable");
+            } else {
+                System.out.println("Is NOT executable");
+            }
         }
     }
 }

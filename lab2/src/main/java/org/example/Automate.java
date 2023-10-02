@@ -114,9 +114,9 @@ public class Automate {
                 TransitionFunction func = TransitionFunctions.get(i);
 
                 List<TransitionFunction> group = new ArrayList<>();
-                for (int q = i; q < TransitionFunctions.size(); q++) {
-                    if (TransitionFunctions.get(q).getCurrentState().equals(func.getCurrentState()) && TransitionFunctions.get(q).getSymbol() == func.getSymbol())
-                        group.add(TransitionFunctions.get(q));
+                for (TransitionFunction transitionFunction : TransitionFunctions) {
+                    if (transitionFunction.getCurrentState().equals(func.getCurrentState()) && transitionFunction.getSymbol() == func.getSymbol())
+                        group.add(transitionFunction);
                 }
 
                 if (group.size() > 1) {
@@ -187,9 +187,9 @@ public class Automate {
             if (func.getCurrentState().equals(StartState))
                 group.add(func);
         }
+
         TransitionFunctions = group;
     }
-
 
     private List<TransitionFunction> DeleteRepeatFunctions() {
         List<TransitionFunction> transitions = new ArrayList<>();
